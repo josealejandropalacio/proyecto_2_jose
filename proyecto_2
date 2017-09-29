@@ -1,69 +1,204 @@
+
 #include <stdio.h>
 #include <stdlib.h>
-#define reservar_memoria (nodo*)malloc(sizeof(nodo));
+#define reservar_memoria (Nodo *)malloc(sizeof(Nodo));
 
-struct nodo{
+struct Nodo{
 	int dato;
-	nodo *siguiente;
-	
-	};
-	
-	nodo *pila;
-	//funciones pila
-	void insertar_elementos(int &, nodo *&);
-	void quitar_elemtos(int &, nodo *&);
-	bool pila_vacia(nodo *);
-	void mostrar_elemtos(int &,nodo *&);
-	bool buscar_elemento(int , nodo *);
-	void pedir_dato();
-	void quitar_elemento(int &dato, nodo *&pila);
-	void editar_elemento();
-	void ordenar_elemento();
-	//prototipo menu
-	void menu_pila();
-	void menu_quitar(int &, nodo *);
-	
-	int main(){
-		menu_pila();
+	Nodo *siguiente;
+};
+Nodo *pila;
+int dato;
+//Prototipo funciones Pila
+void Insertar_Elemento(int &, Nodo *&);
+void Quitar_Elemento();
+bool Pila_Vacia();
+void Mostrar_Elementos();
+bool Buscar_Elemento();
+void Pedir_Dato();
+void Quitar_Elementos();
+void Editar_Elemento();
+void Ordenar_Elemento();
+//Prototipos Menu
+void Menu_Pila();
+void Menu_Eliminar(int &, Nodo *);
+
+int main(){
+	Menu_Pila();
+}
+void Menu_Pila(){
+	int n, dato;
+	Nodo *pila;
+	int opcion;
+	do{
 		
+		printf("+\n  •  •   MENU A  • •  +\n");
+		printf("\n-----------------------------\n");
+		printf("\n  1. Insertar               \n");
+		printf("\n   2. Mostrar               \n");
+		printf("\n   3. Buscar                \n");
+		printf("\n   4. Eliminar              \n");
+		printf("\n   5. Editar                \n");
+		printf("\n   6. Ordenar               \n");
+		printf("\n   7. Estado de la Pila.    \n");
+		printf("\n  0. Salir                  \n");
+		printf("\n-----------------------------\n");
+	
+		printf("\nQue deceas hacer: ");
+		scanf("%d",&opcion);
+		system("cls");
+		switch(opcion){
+			case 1:Pedir_Dato();
+				break;
+			case 2:Mostrar_Elementos();
+				break;
+			case 3:Buscar_Elemento();
+				break;
+			case 4:Menu_Eliminar(dato, pila);
+				break;
+			case 5:Editar_Elemento();
+				break;
+			case 6:Ordenar_Elemento();
+				break;
+			case 7:Pila_Vacia();
+				break;
+			case 0:exit('0');
+				break;
+			default:printf("Numero Equivocado!\n");
+				break;
+		}
+		system("pause");
+		system("cls");
+	}while(opcion != 0);
+}
+
+void Menu_Eliminar(int &dato, Nodo *pila){
+	int opc;
+	do{
+		
+		printf("\n •   Menu para eliminacion  • \n");
+		printf("\n------------------------------\n");
+		printf("\n                              \n");
+		printf("\n  1. Eliminar Todo.           \n");
+		printf("\n  2. Eliminar un elemento.    \n");
+		printf("\n  0. Salir.                   \n");
+		printf("\n----------------------------- \n");
+		
+		printf("Que accion quieres tomar\n: ");
+		scanf("%d",&opc);
+		switch(opc){
+			case 1:Quitar_Elementos();
+				break;
+			case 2:Quitar_Elemento();
+				break;
+			case 0:system("cls");
+				Menu_Pila();
+				break;
+			default:printf("Numero Erroneo\n");
+				break;
+		}
+		system("pause");
+		system("cls");
+	}while(opc != 0);
+}
+
+void Pedir_Dato(){
+	int dato;
+	char rpt;
+	do{
+		printf("Porfavor, Ingrese un dato: ");  
+		scanf("%d",&dato);
+		system("cls");
+		Insertar_Elemento(dato,pila);
+		printf("Quieres agregar otro dato (s/n): ");
+		fflush(stdin);
+		scanf("%c",&rpt);	
+		system("cls");
+
+	}while((rpt == 'S') || (rpt == 's'));
+}
+
+void Insertar_Elemento(int &n, Nodo *&pila){
+	Nodo *elemento = reservar_memoria;
+	elemento->dato = n;
+	elemento->siguiente = pila;
+	pila = elemento;
+	if(elemento != NULL){
+		printf("Elemento guardado satisfactoriamente\n");
+	}else{
+		printf("Error\n");
 	}
-	void menu_pila(){
-		int n, dato;
-		nodo *pila;
-		int opcion;
-		do{	
-			printf("\n_____menu_____\n");
-			printf("\n....1 .insertar....\n");
-			printf("\n....2 .mostrar....\n");
-			printf("\n....3 .buscar....\n");
-			printf("\n....4 .editar....\n");
-			printf("\n....5 .eliminar dc....\n");
-			printf("\n....6 .pila vacia....\n");
-			printf("que quieres hacer\n");
-			scanf("%d",&opcion);
-			system("cls");
-			
-			switch(opcion){
-				case 1:pedir_dato();
-				break;
-				case 2:mostrar_elemtos(dato,pila);
-				break;
-				case 3:buscar_elemento(dato,pila);
-				break;
-				case 4:menu_quitar(dato,pila);
-				break;
-				case 5:editar_elemento();
-				break;
-				case 6:ordenar_elemento();
-				break;
-				case 7:pila_vacia(pila);
-				break;
-				case 0:exit('0');
-				break;
-				
+}
+
+void Quitar_Elemento(){
+	if(Pila_Vacia()){
+		printf("Pila vacia\n");
+	}else{
+		Nodo *aux = pila;
+		dato = aux->dato;
+		pila = aux->siguiente;
+		free(aux);
+		printf("Elementos Borrado Exitosamente!\n");
+	}
+}
+
+void Quitar_Elementos(){
+	if(Pila_Vacia() == true){
+		printf("Pila vacia\n");
+	}else{
+		while(pila != NULL){
+			Nodo *aux = pila;
+			dato = aux->dato;
+			pila = aux->siguiente;
+			printf("Elemento %d Borrado Exitosamente!\n",aux->dato);
+			free(aux);
+		}
+	}
+}
+
+bool Pila_Vacia(){
+	return (pila == NULL)?true:false;
+}
+
+void Mostrar_Elementos(){
+	Nodo *Nueva_Pila = pila;
+	fflush(stdin);
+	if(Pila_Vacia()){
+		printf("pila vacia!\n");
+	}else{
+		if(Nueva_Pila != NULL){
+			while(Nueva_Pila != NULL){
+				printf("%d,",Nueva_Pila->dato);
+				Nueva_Pila = Nueva_Pila->siguiente;	
 			}
-			
-		}while(opcion!=0);
-		
+		}else{
+			printf("%d.",Nueva_Pila->dato);
+		}printf("\n");
 	}
-	
+}
+
+bool Buscar_Elemento(){
+	Nodo *pilita = pila;
+	int datos;
+	bool encontrado = false;
+	if(Pila_Vacia() == true){
+		printf("Pila Vacia!\n");
+	}
+	printf("Ingrese el dato a buscar: ");
+	scanf("%d",&datos);
+	while((pilita != NULL)){
+		if(datos == pilita->dato){
+			encontrado = true;
+			printf("se encontro el dato: %d\n",pilita->dato);	
+		}	
+		pilita = pilita->siguiente;
+	}
+	if(encontrado == false){
+		printf("Dato no encontrado: %d\n",datos);
+	}
+}
+void Editar_Elemento(){
+}
+
+void Ordenar_Elemento(){
+}
