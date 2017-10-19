@@ -716,3 +716,4 @@ void Estado_Cola(Nodo *inicio){
 	}else{
 		printf("\nCola Llena!\n\n");
 	}
+}
